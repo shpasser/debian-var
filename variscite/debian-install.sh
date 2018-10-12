@@ -78,7 +78,7 @@ usage()
 	echo " Usage: $0 OPTIONS"
 	echo
 	echo " OPTIONS:"
-	echo " -b <mx6cb|scb|dart>	carrier Board model (MX6CustomBoard/SOLOCustomBoard/DART-MX6) - mandartory parameter."
+	echo " -b <mx6cb|scb|dart|aran44700>	carrier Board model (MX6CustomBoard/SOLOCustomBoard/DART-MX6) - mandartory parameter."
 	echo " -t <cap|res>		Touchscreen model (capacitive/resistive) - mandatory in case of MX6CustomBoard; ignored otherwise."
 #	echo " -r <nand|emmc>		Rootfs device (NAND/eMMC) - mandatory in case of MX6CustomBoard/SOLOCustomBoard; ignored in case of DART-MX6."
 	echo
@@ -122,6 +122,8 @@ elif [ $BOARD = "scb" ] ; then
 	STR="SOLOCustomBoard"
 elif [ $BOARD = "dart" ] ; then 
 	STR="DART-MX6"
+elif [ $BOARD = "aran44700" ] ; then
+	STR="ARAN Carrier 44700 Board"
 else
 	usage
 	exit 1
@@ -179,6 +181,8 @@ if [ $CPUS = 1 ] || [ $CPUS = 2 ] ; then
 			# iMX6 Solo/DualLite
 			if [ $BOARD = "scb" ] ; then
 				KERNEL_DTB=imx6dl-var-som-vsc.dtb
+			elif [ $BOARD = "aran44700" ] ; then
+				KERNEL_DTB=imx6dl-var-som-aran.dtb
 			else
 				if [ $TOUCHSCREEN = "cap" ] ; then
 					KERNEL_DTB=imx6dl-var-som-cap.dtb
