@@ -42,8 +42,8 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
 readonly G_LINUX_KERNEL_GIT="https://github.com/shpasser/linux-imx.git"
 readonly G_LINUX_KERNEL_BRANCH="imx_4.9.11_1.0.0_ga-var01"
-readonly G_LINUX_KERNEL_REV="86c54d808ad9f1b39f8641d2da2e6da4bfff9f30"
-readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_defconfig'
+readonly G_LINUX_KERNEL_REV="3d398e6ea2ff8f69075c526ecbe6ee864ac54ca7"
+readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_aran_defconfig'
 readonly G_LINUX_DTB='imx6dl-var-som-solo-vsc.dtb imx6dl-var-som-solo-aran.dtb'
 
 ## uboot
@@ -693,7 +693,7 @@ function install_wl18xx_packages() {
 
 	pr_info "Installing wl18xx bt firmware"
 	cp ${G_WILINK8_FW_BT_SRC_DIR}/initscripts/TIInit_*.bts ${WL18XX_FW_DIR}
-	
+
 	pr_info "Installing wl18xx wifi firmware"
 	cp ${G_WILINK8_FW_WIFI_SRC_DIR}/*.bin ${WL18XX_FW_DIR}
 	cp ${G_VARISCITE_PATH}/wl1271-nvs.bin ${WL18XX_FW_DIR}

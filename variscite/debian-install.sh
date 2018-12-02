@@ -9,6 +9,8 @@ KERNEL_IMAGE=uImage
 KERNEL_DTB=""
 ROOTFS_IMAGE=rootfs.ubi.img
 ROOTFS_DEV="emmc"
+BOARD="none"
+KERNEL_ONLY="no"
 
 
 install_bootloader()
@@ -30,7 +32,7 @@ install_bootloader()
 	kobs-ng init -x $MEDIA/$SPL_IMAGE --search_exponent=1 -v > /dev/null
 
 	flash_erase /dev/mtd1 0 0 2> /dev/null
-	nandwrite -p /dev/mtd1 $MEDIA/$UBOOT_IMAGE 
+	nandwrite -p /dev/mtd1 $MEDIA/$UBOOT_IMAGE
 }
 
 install_kernel()
@@ -60,9 +62,13 @@ install_rootfs_to_nand()
 install_rootfs()
 {
 	if [ $ROOTFS_DEV != "emmc" ] ; then
-		install_rootfs_to_nand
+		if [ $KERNEL_ONLY = "no" ] ; then
+			install_rootfs_to_nand
+		fi
 	else
-		/usr/sbin/debian-emmc.sh
+		if [ $KERNEL_ONLY = "no" ] ; then
+			/usr/sbin/debian-emmc.sh
+		fi
 		echo
 		echo "Setting rootfs device to emmc in the U-Boot enviroment"
 		fw_setenv rootfs_device emmc  2> /dev/null
@@ -80,6 +86,7 @@ usage()
 	echo " OPTIONS:"
 	echo " -b <mx6cb|scb|dart|aran44700>	carrier Board model (MX6CustomBoard/SOLOCustomBoard/DART-MX6) - mandartory parameter."
 	echo " -t <cap|res>		Touchscreen model (capacitive/resistive) - mandatory in case of MX6CustomBoard; ignored otherwise."
+	echo " -k	install kernel and device tree only."
 #	echo " -r <nand|emmc>		Rootfs device (NAND/eMMC) - mandatory in case of MX6CustomBoard/SOLOCustomBoard; ignored in case of DART-MX6."
 	echo
 }
@@ -95,7 +102,7 @@ finish()
 echo "*** VAR-MX6 Debian eMMC/NAND RECOVERY Version 60 ***"
 echo
 
-while getopts :b:t:r: OPTION;
+while getopts :b:t:r:k OPTION;
 do
 	case $OPTION in
 	b)
@@ -103,6 +110,9 @@ do
 		;;
 	t)
 		TOUCHSCREEN=$OPTARG
+		;;
+	k)
+		KERNEL_ONLY="yes"
 		;;
 #	r)
 #		ROOTFS_DEV=$OPTARG
@@ -118,9 +128,9 @@ STR=""
 
 if [ $BOARD = "mx6cb" ] ; then
 	STR="MX6CustomBoard"
-elif [ $BOARD = "scb" ] ; then 
+elif [ $BOARD = "scb" ] ; then
 	STR="SOLOCustomBoard"
-elif [ $BOARD = "dart" ] ; then 
+elif [ $BOARD = "dart" ] ; then
 	STR="DART-MX6"
 elif [ $BOARD = "aran44700" ] ; then
 	STR="ARAN Carrier 44700 Board"
@@ -169,6 +179,8 @@ if [ $CPUS = 1 ] || [ $CPUS = 2 ] ; then
 	if [ `dmesg | grep -c SOM-SOLO` = 1 ] ; then
 		if [ "$BOARD" = "scb" ] ; then
 			KERNEL_DTB=imx6dl-var-som-solo-vsc.dtb
+		elif [ $BOARD = "aran44700" ] ; then
+			KERNEL_DTB=imx6dl-var-som-solo-aran.dtb
 		else
 			if [ $TOUCHSCREEN = "cap" ] ; then
 				KERNEL_DTB=imx6dl-var-som-solo-cap.dtb
