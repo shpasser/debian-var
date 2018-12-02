@@ -122,6 +122,8 @@ $ saveenv
 6 Build Results
 
 The resulted images are located in ~/var_som_mx6_debian/output/.
+
+
 Image Name | How to use
 -----------|-----------
 rootfs.tar.gz | Root filesystem tarball used for installation on SD card and eMMC
