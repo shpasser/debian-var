@@ -155,7 +155,7 @@ x_user |  | used for X session access
 To install Debian to the on-SOM eMMC, run the following command as root:
 
 ```sh
-# debian-install.sh -b <scb|aran44700>
+$ debian-install.sh -b <scb|aran44700>
 ```
 
 where the "-b" option provide the carrier board used (SOLOCustomBoard/aran44700) and the "-t" option provide the touch type when using MX6CustomBoard (ignored otherwise).
